@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import dotenv from "dotenv";
 import connectDB from "./src/config/mongodb.config.js";
 import  ShortUrl  from './src/models/shortUrl.model.js';
-
+import shortUrl from "./src/routes/shortUrl.route.js";
 dotenv.config("./.env");
 
 const app = express();
@@ -13,17 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // POST - Create Short URL
-app.post('/api/create', (req, res) => {
-    const { url } = req.body;
-    const shortUrl = nanoid(7);
-    const newUrl = new ShortUrl({
-        fullUrl: url,
-        shortUrl: shortUrl,
-    })
-    newUrl.save();
-    console.log(url);
-    res.send(nanoid(7));
-});
+app.use('/api/create', shortUrl);
 
 // Get - redirection?
 app.get('/:shortUrl', async (req, res) => {
@@ -42,4 +32,3 @@ app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });
 
-// GET - Redirection
